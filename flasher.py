@@ -1,7 +1,7 @@
 #encoding:utf-8
-from flask import Flask, make_response
+from flask import Flask, jsonify
 from helper import is_isbn_or_key
-
+from yushu_book import YuShuBook
 
 app = Flask(__name__)
 #载入配置文件
@@ -16,7 +16,12 @@ def search(q, page):
   :return:
   """
   isbn_or_key = is_isbn_or_key(q)
-  pass
+  if isbn_or_key == 'isbn':
+    result = YuShuBook.search_by_isbn(q)
+  else:
+    result = YuShuBook.search_by_keyword(q)
+  return jsonify(result)
+  #return json.dumps(result), 200, {'content-type':'application/json'}
 
 
 
