@@ -34,3 +34,7 @@ class YuShuBook:
 
     result = HTTP.get(url)
     self.__fill_collection(result)
+
+  @property
+  def first(self):
+    return self.books[0] if self.total >= 1 else None
