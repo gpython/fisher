@@ -1,10 +1,14 @@
 #encoding:utf-8
+from collections import namedtuple
+
 from flask import current_app
-from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, desc
+from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, desc, func
 from sqlalchemy.orm import  relationship
-from app.models.base import Base
+from app.models.base import Base, db
+from app.models.wish import Wish
 from app.spider.yushu_book import YuShuBook
 
+EachGiftWishCount= namedtuple('EachGiftWishCount', ['count', 'isbn'])
 
 class Gift(Base):
   id = Column(Integer, primary_key=True)
@@ -50,3 +54,14 @@ class Gift(Base):
       uid=uid, launched=False).order_by(
       desc(Gift.create_time)).all()
     return gifts
+
+  #根据传入的一组isbn 到Gift表中检索相应的礼物 并且计算出某个礼物的 Wish心愿数量(想要获取此isbn的人数)
+  @classmethod
+  def get_wish_counts(cls, isbn_list):
+    count_list = db.session.query(func.count(Wish.id), Wish.isbn).filter(
+      Wish.launched==False, Wish.isbn.in_(isbn_list), Wish.status == 1).group_by(
+      Wish.isbn).all()
+    print(count_list)
+    #count_list = [EachGiftWishCount(w[0], w[1]) for w in count_list]
+    count_list = [{'count':w[0], 'isbn':w[1]} for w in count_list]
+    return count_list

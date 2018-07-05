@@ -126,3 +126,11 @@ with db.auto_commit():
 #flask_sqlalchemy 实现了BaseQuery类 继承自orm.Query 并实现了get_or_404 first_or_404 paginate 等函数
 #现在可自定义 Query类 继承BaseQuery类 实现想要的其他功能
 #字典的.keys() 获得所有字典的键的集合
+
+#filter_by接受 关键字参数
+Table.query.filter_by(id=id, name=name).order_by(desc(Table.create_time)).all()
+#filter   接受 条件表达式 跨表跨模型时
+db.session.query(Table1).filter(Table1.launched == False)
+db.session.query(func.count(Wish.id), Wish.isbn).filter(
+      Wish.launched==False, Wish.isbn.in_(isbn_list), Wish.status == 1).group_by(
+      Wish.isbn).all()
