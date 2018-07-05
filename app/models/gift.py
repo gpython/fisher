@@ -8,7 +8,7 @@ from app.models.base import Base, db
 from app.models.wish import Wish
 from app.spider.yushu_book import YuShuBook
 
-EachGiftWishCount= namedtuple('EachGiftWishCount', ['count', 'isbn'])
+# EachGiftWishCount= namedtuple('EachGiftWishCount', ['count', 'isbn'])
 
 class Gift(Base):
   id = Column(Integer, primary_key=True)
