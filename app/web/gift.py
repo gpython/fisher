@@ -8,10 +8,16 @@ from . import web
 __author__ = '七月'
 
 
+#当前用户的礼物赠送清单
 @web.route('/my/gifts')
 @login_required
 def my_gifts():
-    return 'My Gift'
+  uid = current_user.id
+  #查询出当前用户的所有礼物清单
+  gifts_of_mine = Gift.get_user_gifts(uid)
+  #根据礼物清单 查询每个礼物的想要的人的数量
+
+
 
 #赠送此书
 @web.route('/gifts/book/<isbn>')

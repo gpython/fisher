@@ -119,3 +119,10 @@ db = SQLAlchemy()
 
 with db.auto_commit():
   pass
+
+############# 修改filter_by
+
+#filter_by 继承自 sqlalchemy 模块 orm目录下query文件中Query类 即orm.Query
+#flask_sqlalchemy 实现了BaseQuery类 继承自orm.Query 并实现了get_or_404 first_or_404 paginate 等函数
+#现在可自定义 Query类 继承BaseQuery类 实现想要的其他功能
+#字典的.keys() 获得所有字典的键的集合
