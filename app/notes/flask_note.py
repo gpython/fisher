@@ -134,3 +134,32 @@ db.session.query(Table1).filter(Table1.launched == False)
 db.session.query(func.count(Wish.id), Wish.isbn).filter(
       Wish.launched==False, Wish.isbn.in_(isbn_list), Wish.status == 1).group_by(
       Wish.isbn).all()
+
+
+################扫描一个文件或模块下所有的对象 可使用如下###############################
+#first_or_404 -> first -> Abort -> HTTPException
+
+class HTTPException:
+  pass
+
+default_exceptions = {}
+__all__ = ['HTTPException']
+
+def _find_exceptions():
+  for name, obj in iteritems(globals()):
+    try:
+      is_http_exception = issubclass(obj, HTTPException)
+    except TypeError:
+      is_http_exception = False
+    if not is_http_exception or obj.code is None:
+      continue
+    __all__.append(obj.__name__)
+    old_obj = default_exceptions.get(obj.code, None)
+    if old_obj is not None and issubclass(obj, old_obj):
+      continue
+    default_exceptions[obj.code] = obj
+
+
+_find_exceptions()
+del _find_exceptions
+################################################
