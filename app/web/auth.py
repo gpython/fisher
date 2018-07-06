@@ -4,7 +4,7 @@ from flask_login import login_user, logout_user
 from app.models.base import db
 from . import web
 from app.models.user import User
-from app.forms.auth import RegisterForm, LoginForm
+from app.forms.auth import RegisterForm, LoginForm, EmailForm, ResetPasswordForm
 from flask import render_template, request, redirect, url_for, flash
 
 __author__ = '七月'
@@ -47,12 +47,29 @@ def forget_password_request():
       account_email = form.email.data
       user = User.query.filter_by(email=account_email).first_or_404()
 
+      from app.libs.email import send_mail
+
+      send_mail(account_email,
+                'Reset Your Password',
+                'email/reset_password.html',
+                user=user, token=user.generate_token())
+      flash('An Email has send to your mailbox ' + account_email)
+      # return redirect(url_for('web.login'))
+
   return render_template('auth/forget_password_request.html', form=form)
 
 
-@web.route('/reset/password/<token>', methods=['GET', 'POST']) 
+@web.route('/reset/password/<token>', methods=['GET', 'POST'])
 def forget_password(token):
-  pass
+  form = ResetPasswordForm(request.form)
+  if request.method == 'POST' and form.validate():
+    success = User.reset_password(token, form.password1.data)
+    if success:
+      flash('Password change success')
+      return redirect(url_for('web.login'))
+    else:
+      flash('Password reset error')
+  return render_template('auth/forget_password.html')
 
 
 @web.route('/change/password', methods=['GET', 'POST'])

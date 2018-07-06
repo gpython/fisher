@@ -163,3 +163,5 @@ def _find_exceptions():
 _find_exceptions()
 del _find_exceptions
 ################################################
+byte 类型 byte_data 转换为字符串
+byte_data.decode('utf-8')
