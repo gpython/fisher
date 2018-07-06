@@ -28,7 +28,7 @@ class TradeInfo:
     )
 
 
-class MyTrade:
+class MyTrades:
   def __init__(self, trades_of_mine, trade_count_list):
     self.trades = []
     self.__trades_of_mine = trades_of_mine
