@@ -3,10 +3,9 @@ from app.models.base import Base, db
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, desc, func
 from sqlalchemy.orm import relationship
 
-
 from app.spider.yushu_book import YuShuBook
 
-
+#心愿模型 (想要书籍信息 想要此书籍用户信息 )
 class Wish(Base):
   id = Column(Integer, primary_key=True)
   user = relationship('User')
@@ -21,7 +20,7 @@ class Wish(Base):
   def book(self):
     yushu_book = YuShuBook()
     yushu_book.search_by_isbn(self.isbn)
-    return yushu_book
+    return yushu_book.first
 
 
   #获取用户的心愿清单 想要得到书籍的列表
@@ -30,6 +29,7 @@ class Wish(Base):
     wishes = Wish.query.filter_by(
       uid=uid, launched=False).order_by(
       desc(Wish.create_time)).all()
+
     return wishes
 
   #根据传入的一组isbn 到 赠送清单Gift表中 查询 不同书籍有多少人要赠送此书

@@ -30,6 +30,7 @@ class TradeInfo:
 
 class MyTrades:
   def __init__(self, trades_of_mine, trade_count_list):
+
     self.trades = []
     self.__trades_of_mine = trades_of_mine
     self.__trade_count_list = trade_count_list
@@ -48,7 +49,7 @@ class MyTrades:
     for trade_count in self.__trade_count_list:
       if trade.isbn == trade_count['isbn']:
         count = trade_count['count']
-
+    # print(BookViewModel(trade.book))
     r = {
       'wishes_count': count,
       'book': BookViewModel(trade.book),

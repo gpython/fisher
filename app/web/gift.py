@@ -16,8 +16,10 @@ def my_gifts():
   uid = current_user.id
   #查询出当前用户的所有礼物清单
   gifts_of_mine = Gift.get_user_gifts(uid)
+
   #根据礼物清单 查询每个礼物的想要的人的数量
   isbn_list = [gift.isbn for gift in gifts_of_mine]
+
   wish_count_list = Gift.get_wish_counts(isbn_list)
 
   view_model = MyTrades(gifts_of_mine, wish_count_list)

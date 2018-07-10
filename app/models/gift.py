@@ -10,6 +10,7 @@ from app.spider.yushu_book import YuShuBook
 
 # EachGiftWishCount= namedtuple('EachGiftWishCount', ['count', 'isbn'])
 
+#赠送的书籍信息 (对应相应的用户信息 赠送书籍信息)
 class Gift(Base):
   id = Column(Integer, primary_key=True)
   user = relationship('User')
@@ -19,6 +20,9 @@ class Gift(Base):
   #礼物是否已经送出 默认没有送出
   launched = Column(Boolean, default=False)
 
+  #判断书籍是否要赠送给自己
+  def is_yourself_gift(self, uid):
+    return True if self.uid == uid else False
 
   #最近上传图书详细信息
   @property
@@ -53,6 +57,7 @@ class Gift(Base):
     gifts = Gift.query.filter_by(
       uid=uid, launched=False).order_by(
       desc(Gift.create_time)).all()
+
     return gifts
 
   #根据传入的一组isbn 到Gift表中检索相应的礼物 并且计算出某个礼物的 Wish心愿数量(想要获取此isbn的人数)
@@ -62,7 +67,6 @@ class Gift(Base):
     count_list = db.session.query(func.count(Wish.id), Wish.isbn).filter(
       Wish.launched==False, Wish.isbn.in_(isbn_list), Wish.status == 1).group_by(
       Wish.isbn).all()
-    print(count_list)
     #count_list = [EachGiftWishCount(w[0], w[1]) for w in count_list]
     count_list = [{'count':w[0], 'isbn':w[1]} for w in count_list]
     return count_list

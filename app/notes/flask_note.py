@@ -20,6 +20,10 @@ form.data  => {'email': 'xxxx@xxxx.com', 'password': 'ssdfsd', 'nickname': 'Goo6
 form.email => <input id="email" name="email" required type="text" value="zhuwn@juzhongjoy.com">
 form.email.data == form.data['email'] => 'xxxx@xxxx.com'
 
+如果表单和模型字段相对应 且字段比较多 可以使用 form.populate_obj(模型实例名) 方式将所有表单字段保存到 模型实例名 中
+if request.method == 'POST' and form.validate():
+
+
 
 
 

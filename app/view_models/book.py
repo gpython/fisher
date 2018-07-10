@@ -1,9 +1,11 @@
 #encoding:utf-8
-from app.spider.yushu_book import YuShuBook
+# from app.spider.yushu_book import YuShuBook
 
 
 class BookViewModel:
   def __init__(self, book):
+    # print(type(book))
+
     self.title = book['title']
     self.publisher = book['publisher']
     self.author = '`'.join(book['author'])
@@ -14,6 +16,7 @@ class BookViewModel:
     self.isbn = book['isbn']
     self.pubdate = book['pubdate']
     self.binding = book['binding']
+    pass
 
   @property
   def intro(self):
