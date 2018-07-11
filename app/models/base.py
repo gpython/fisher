@@ -56,3 +56,6 @@ class Base(db.Model):
       print(key, value)
       if hasattr(self, key) and key != 'id':
         setattr(self, key, value)
+
+  def delete(self):
+    self.status = 0
